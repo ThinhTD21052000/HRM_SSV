@@ -1,0 +1,88 @@
+﻿@inherits ComponentBase
+
+<Droppable DataType="object" OnDropAsync="OnDropAsync">
+    <div @ref="QuillContainer">
+        <div innerelement="true">@ChildContent</div>   
+        <div>
+            @((MarkupString)Value)
+        </div>
+    </div>
+</Droppable>
+
+<div @ref="ToolBar">
+    <span class="ql-formats">
+        <select class="ql-size">
+            <option selected="">ﾃﾞﾌｫﾙﾄ</option>
+            <option value="18px">18px</option>
+            <option value="22px">22px</option>
+            <option value="26px">26px</option>
+            <option value="30px">30px</option>
+        </select>
+        <button class="ql-bold">太字</button>
+        <button class="ql-italic">斜体</button>
+        <button class="ql-underline">下線</button>
+        <button class="ql-strike">取消線</button>
+        <select class="ql-color">文字色</select>
+        <select class="ql-background">背景色</select>
+    </span>
+    @if (Type.Equals("full")) {
+        <span class="ql-formats">
+            <select class="ql-header">
+                <option selected=""></option>
+                <option value="1"></option>
+                <option value="2"></option>
+                <option value="3"></option>
+                <option value="4"></option>
+                <option value="5"></option>
+                <option value="6"></option>
+            </select>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-script" value="super"></button>
+            <button class="ql-script "value="sub"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-header" value="1"></button>
+            <button class="ql-header "value="2"></button>
+            <button class="ql-blockquote"></button>
+            <button class="ql-code-block"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-direction" value="rtl"></button>
+            <select class="ql-align">
+                <option selected=""></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+            </select>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+            <button class="ql-video"></button>
+            <button class="ql-formula"></button>
+        </span>
+        <span class="ql-formats">
+            <button class="ql-clean"></button>
+        </span>
+    }
+</div>
+<style>
+    .ql-editor{
+        border: 1px solid #ced4da;
+        border-radius: 0.2rem;
+        background: white;
+    }
+    .ql-tooltip{
+        z-index: 9999;
+    }
+    .ql-toolbar{
+        zoom: @Zoom;
+    }
+</style>
