@@ -3,9 +3,6 @@
 <Droppable DataType="object" OnDropAsync="OnDropAsync">
     <div @ref="QuillContainer">
         <div innerelement="true">@ChildContent</div>   
-        <div>
-            @((MarkupString)Value)
-        </div>
     </div>
 </Droppable>
 
