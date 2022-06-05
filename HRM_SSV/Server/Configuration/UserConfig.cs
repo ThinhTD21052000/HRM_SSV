@@ -16,14 +16,8 @@ namespace Server.Configuration
                 .IsRequired();
             builder.Property(x => x.Address)
                 .HasMaxLength(250);
-            builder.HasOne(x => x.Team)
-                .WithMany(x => x.User)
-                .HasForeignKey("TeamId")
-                .IsRequired(false);
-            builder.HasOne(x => x.Position)
-                .WithMany(x => x.User)
-                .HasForeignKey("PositionId")
-                .IsRequired(false);
+            builder.Property(x => x.Password)
+                .HasMaxLength(250);
         }
     }
 }

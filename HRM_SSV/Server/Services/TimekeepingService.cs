@@ -30,7 +30,7 @@ namespace Server.Services
 
         public async Task Delete(int id)
         {
-            await _timekeepingRepository.Delete(_mapper.Map<Timekeeping>( await Get(id)));
+            await _timekeepingRepository.Delete(await _timekeepingRepository.Get(x => x.Id == id));
         }
 
         public async Task<TimekeepingToGet> Get(int id)

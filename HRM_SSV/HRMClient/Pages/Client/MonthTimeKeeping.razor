@@ -1,0 +1,98 @@
+﻿@page "/Timekeeping"
+
+@using Domain.Modals.MonthTimekeeping;
+@using Domain.Modals.Timekeeping;
+
+<Spin Spinning="Loadding">
+    <div class="d-flex justify-content-between mt-5 mb-3">
+        <h5>Quản lý phòng ban</h5>
+        <div>
+                <label>Tháng: </label>
+                <AntDesign.InputNumber Class="mr-4" @bind-Value="MonthTimekeepingToGet.Month" Min="1" Max="12" DefaultValue="@(DateTime.Now.Month)"></AntDesign.InputNumber>
+
+                <label>Năm: </label> 
+                <AntDesign.InputNumber Class="mr-4" @bind-Value="MonthTimekeepingToGet.Year" Min="2000" Max="2200" DefaultValue="@(DateTime.Now.Year)"></AntDesign.InputNumber>
+
+            <Button Type="@ButtonType.Primary" OnClick="Insert" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle">
+                <Icon Type="plus" Theme="outline" />
+            </Button>
+        </div>
+    </div>
+    <Table TItem="MonthTimekeepingToGet" DataSource="@MonthTimekeepingList">
+        <Column @bind-Field="@context.Month" Title="Tháng/Năm">
+            <span>@($"{context.Month}/{context.Year}")</span>
+        </Column>
+        <Column @bind-Field="@context.CreateDate" Title="Ngày tạo">
+            <span>@context.CreateDate.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <ActionColumn Title="Chức năng">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="() => OpenTimeKeeping(context.Id)" Shape="@ButtonShape.Circle"><Icon Type="form" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Popconfirm Title="Bạn có chắc chắn muốn xóa không?" OkText="Đồng ý" CancelText="Hủy" OnConfirm="(e) => Delete(context.Id)">
+                        <Button Danger Shape="@ButtonShape.Circle"><Icon Type="delete" Theme="outline"/></Button>
+                    </Popconfirm>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+<Modal Title="Chấm công"
+    Visible="@VisibleModal"
+    OnOk="@HideModal"
+    OnCancel="@HideModal"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    <Spin Spinning="LoaddingTimekeeping">
+    <div class="d-flex justify-content-end mt-5 mb-3">
+        <div>
+            <DatePicker Style="width: 140px" DefaultValue="@DateTime.Now" @bind-Value="@TimekeepingToGet.Date" Format="dd/MM/yyyy" />
+            <Button Type="@ButtonType.Primary" OnClick="Upsert" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle">
+                <Icon Type="plus" Theme="outline" />
+            </Button>
+        </div>
+    </div>
+    <Table TItem="TimekeepingToGet" DataSource="TimekeepingList">
+        <Column @bind-Field="@context.Date" Title="Ngày">
+            <span>@context.Date.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <ActionColumn Width="80" Title="Chức năng">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="() => ShowTimeKeeping(context.Date)" Shape="@ButtonShape.Circle"><Icon Type="form" Theme="outline"/></Button>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+</Modal>
+
+<Modal Title="Chấm công"
+    Width="1200"
+    Visible="@VisibleModalTimekeeping"
+    OnOk="@Save"
+    OnCancel="@HideModalTimekeeping"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    <Table TItem="TimekeepingToGet" DataSource="TimekeepingList2">
+        <Column @bind-Field="@context.FullName" Title="Họ và tên"></Column>
+        <Column @bind-Field="@context.PositionName" Title="Chức vụ"></Column>
+        <Column @bind-Field="@context.TeamName" Title="Đội"></Column>
+        <Column @bind-Field="@context.Status" Title="Trạng thái">
+            <RadioGroup @bind-Value="@context.Status">
+                                <Radio Value="1">Có</Radio>
+                                <Radio Value="2">Nghỉ phép</Radio>
+                                <Radio Value="3">Không phép</Radio>
+                                <Radio Value="4">Đi muộn</Radio>
+                            </RadioGroup>
+        </Column>
+        <Column @bind-Field="@context.Note" Title="Ghi chú">
+            <TextArea Rows="4" @bind-Value="@context.Note"/>
+        </Column>
+    </Table>
+</Modal>
+
+@code {
+}

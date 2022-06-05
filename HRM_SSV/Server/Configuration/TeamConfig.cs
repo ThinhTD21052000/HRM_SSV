@@ -17,9 +17,6 @@ namespace Server.Configuration
             builder.Property(x => x.Manager)
                 .HasMaxLength(100)
                 .IsRequired();
-            builder.HasOne(x => x.Department)
-                .WithMany(x => x.Teams)
-                .HasForeignKey(x => x.DepartmentId);
         }
     }
 }

@@ -11,6 +11,5 @@
         public string Email { get; set; } = string.Empty;
         //Date of incorporation
         public DateTime DOI { get; set; }
-        public virtual List<Department> Departments { get; set; } = new();
     }
 }

@@ -5,7 +5,7 @@ using System.Net;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +49,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
-var json = new WebClient().DownloadString("https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_YoOv7XErX/.well-known/jwks.json");
+//var json = new WebClient().DownloadString("https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_YoOv7XErX/.well-known/jwks.json");
 
 
 app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());

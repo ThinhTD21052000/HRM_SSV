@@ -30,7 +30,7 @@ namespace Server.Services
 
         public async Task Delete(int id)
         {
-            await _positionRepository.Delete(_mapper.Map<Position>( await Get(id)));
+            await _positionRepository.Delete(await _positionRepository.Get(x => x.Id == id));
         }
 
         public async Task<PositionToGet> Get(int id)

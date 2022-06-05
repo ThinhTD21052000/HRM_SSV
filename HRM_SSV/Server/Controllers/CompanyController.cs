@@ -5,7 +5,7 @@ using Server.Services;
 
 namespace Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase
@@ -20,7 +20,14 @@ namespace Server.Controllers
         [Route("GetList")]
         public async Task<IActionResult> GetList()
         {
-            return Ok(await _companyService.GetList());
+            var list = await _companyService.GetList();
+            CompanyToGet company = new();
+            if (list.Count > 0)
+            {
+                company = list[0];
+                company.ImageFile = Convert.ToBase64String(company.Logo);
+            }
+            return Ok(company);
         }
 
         [HttpGet]

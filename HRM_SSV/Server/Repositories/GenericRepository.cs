@@ -8,6 +8,7 @@ namespace Server.Repositories
     {
         Task<IEnumerable<T>> GetAll();
         Task<T> Get(Expression<Func<T, bool>> filter = null);
+        T GetBasic(Expression<Func<T, bool>> filter = null);
         Task Add(T entity);
         Task Update(T entity);
         Task Delete(T entity);
@@ -23,7 +24,7 @@ namespace Server.Repositories
 
         public async Task Add(T entity)
         {
-            await _db.AddAsync(entity);
+            await _db.Set<T>().AddAsync(entity);
             await _db.SaveChangesAsync();
         }
 
@@ -43,9 +44,14 @@ namespace Server.Repositories
             return await _db.Set<T>().ToListAsync();
         }
 
+        public T GetBasic(Expression<Func<T, bool>> filter = null)
+        {
+            return _db.Set<T>().FirstOrDefault(filter);
+        }
+
         public async Task Update(T entity)
         {
-            _db.Update(entity);
+            _db.Set<T>().Update(entity);
             await _db.SaveChangesAsync();
         }
     }

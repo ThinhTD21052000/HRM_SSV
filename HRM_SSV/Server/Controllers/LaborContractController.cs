@@ -5,7 +5,7 @@ using Server.Services;
 
 namespace Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LaborContractController : ControllerBase
@@ -18,9 +18,11 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("GetList")]
-        public async Task<IActionResult> GetList()
+        public async Task<IActionResult> GetList(Guid id)
         {
-            return Ok(await _laborContractService.GetList());
+            var list = await _laborContractService.GetList();
+            var laborContracts = list.Where(x=>x.UserId.Equals(id.ToString())).ToList();
+            return Ok(laborContracts);
         }
 
         [HttpGet]

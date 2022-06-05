@@ -1,0 +1,70 @@
+﻿@page "/WageType"
+@using Domain.Modals.WageType;
+@using Domain.Modals.Position;
+
+<Spin Spinning="Loadding">
+    <div class="d-flex justify-content-between mt-5 mb-3">
+        <h5>Quản lý lương cơ bản</h5>
+        <Button Type="@ButtonType.Primary" OnClick="(e) => OpenUpsert(false, new Wage_TypeToGet())" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle">
+            <Icon Type="plus" Theme="outline" />
+        </Button>
+    </div>
+    <Table TItem="Wage_TypeToGet" DataSource="@WageTypeList">
+        <Column @bind-Field="@context.Title" Title="Tiêu đề"></Column>
+        <Column @bind-Field="@context.BaseSalary" Title="Mức lương"></Column>
+        <Column @bind-Field="@context.Description" Title="Mô tả"></Column>
+        <ActionColumn Title="Chức năng">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="(e) => OpenUpsert(true, context)" Shape="@ButtonShape.Circle"><Icon Type="edit" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Popconfirm Title="Bạn có chắc chắn muốn xóa không?" OkText="Đồng ý" CancelText="Hủy" OnConfirm="(e) => Delete(context.Id)">
+                        <Button Danger Shape="@ButtonShape.Circle"><Icon Type="delete" Theme="outline"/></Button>
+                    </Popconfirm>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+<Modal Title="@ModelTitle"
+    Visible="@VisibleModal"
+    OnOk="@Upsert"
+    OnCancel="@HideModal"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    <div>
+        <label>Tiêu đề</label>
+        <Input @bind-Value="WageTypeToGet.Title"></Input>
+    </div>
+    <div class="row">
+        <div class="col-6">
+        <label>Số tiền</label>
+        <br/>
+        <AntDesign.InputNumber @bind-Value="WageTypeToGet.BaseSalary" Min="10000" Max="1000000000" Class="w-100" DefaultValue="50000"></AntDesign.InputNumber>
+    </div>
+    <div class="col-6">
+        <label>Chức vụ</label>
+            <Select DataSource="@PositionList"
+                @bind-Value="@WageTypeToGet.PositionId"
+                DefaultValue="@(PositionList[0].Id)"
+                ValueName="@nameof(PositionToGet.Id)"
+                LabelName="@nameof(PositionToGet.Name)">
+            </Select>
+    </div>
+    </div>
+    <div>
+        <label>Mô tả</label>
+        <TextArea @bind-Value="WageTypeToGet.Description"></TextArea>
+    </div>
+    <div>
+        <b>Tải file</b>
+        <br/>
+            <InputFile type="file" style="display: none" OnChange="FilePicker" id="chooseFile"/>
+            <button class="btn btn-primary mt-2" onclick="onPickFile('chooseFile')">Chọn file</button>
+    </div>
+</Modal>
+
+@code {
+
+}

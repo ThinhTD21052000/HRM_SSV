@@ -1,0 +1,92 @@
+﻿@page "/Admin/Information"
+@layout AdminLayout
+<Spin Spinning="Loadding">
+    <div class="row">
+        <div class="col-3">
+            <img class="rounded-circle" id="imageFile" src="@("data:image/png;base64," + UserToGet.ImageFile)" width="250px" height="250px"/>
+            <InputFile type="file" style="display: none" OnChange="FilePicker" id="chooseFileImage"/>
+            <button class="btn btn-success mt-2 ml-3" onclick="onPickFile('chooseFileImage')">Tải ảnh đại diện</button>
+        </div>
+        <div class="col-9">
+            <Tabs @bind-ActiveKey="@ActiveKey" Animated>
+	            <TabPane Tab="Thông tin" Key="1">
+                    <div class="row">
+                        <div class="col-10">
+                            <div>
+                        <p>Tên tài khoản:</p>
+                        <Input @bind-Value="UserToGet.UserName"></Input>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <p>Họ:</p>
+                                <Input @bind-Value="UserToGet.LastName"></Input>
+                            </div>
+                        <div class="col-6">
+                            <p>Tên:</p>
+                            <Input @bind-Value="UserToGet.FirstName"></Input>
+                        </div>
+                        <div class="col-6">
+                <p>Giới tính</p>
+                <Select DataSource="@SexList"
+                    @bind-value="@UserToGet.Sex"
+                    DefaultValue="@(1)"
+                    ValueName="@nameof(Sex.Id)"
+                    LabelName="@nameof(Sex.Name)">
+                </Select>
+            </div>
+                    <div class="col-6">
+                        <p>Ngày sinh</p>
+                        <DatePicker class="w-100" @bind-Value="UserToGet.DoB" Format="dd/MM/yyyy"></DatePicker>
+                    </div>
+                    </div>
+                    <div>
+                        <p>Email:</p>
+                        <Input @bind-Value="UserToGet.Email"></Input>
+                    </div>
+                    <div>
+                        <p>Số điện thoại:</p>
+                        <Input @bind-Value="UserToGet.PhoneNumber"></Input>
+                    </div>
+                    <div>
+                        <p>Địa chỉ:</p>
+                        <Input @bind-Value="UserToGet.Address"></Input>
+                    </div>
+                
+                    <div class="d-flex justify-content-end mt-3">
+                        <Button OnClick="@Update" Type="@ButtonType.Primary" Size="@ButtonSize.Large">Lưu thay đổi</Button>
+                        <Space>
+                            <Button OnClick="@Cancel" Size="@ButtonSize.Large">Hủy</Button>
+                        </Space>
+                    </div>
+                        </div>
+
+                    </div>
+                </TabPane>
+                <TabPane Tab="Bảo mật" Key="2">
+                  <div class="row">
+                      <div class="col-7">
+                          <div>
+                        <p>Nhập mật khẩu hiện tại:</p>
+                        <InputPassword @bind-Value="CurrentPassword"></InputPassword>
+                    </div>
+                    <div>
+                        <p>Nhập mật khẩu mới:</p>
+                        <InputPassword @bind-Value="NewPassword"></InputPassword>
+                    </div>
+                    <div>
+                        <p>Nhập lại mật khẩu:</p>
+                        <InputPassword @bind-Value="RecentPassword"></InputPassword>
+                    </div>
+                     <div class="d-flex justify-content-end mt-3">
+                        <Button OnClick="@ChangePassword" Type="@ButtonType.Primary" Size="@ButtonSize.Large">Đổi mật khẩu</Button>
+                    </div>
+                      </div>
+                  </div>
+                </TabPane>
+            </Tabs>
+        </div>
+    </div>
+</Spin>
+
+@code {
+}

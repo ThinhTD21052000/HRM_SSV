@@ -203,7 +203,8 @@ namespace Server.Migrations
 
                     b.Property<string>("Fax")
                         .IsRequired()
-                        .HasColumnType("VARCHAR");
+                        .HasMaxLength(12)
+                        .HasColumnType("VARCHAR(12)");
 
                     b.Property<string>("ListPhoneNumber")
                         .IsRequired()
@@ -260,6 +261,9 @@ namespace Server.Migrations
                     b.Property<byte[]>("Attachment")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<byte[]>("AttachmentPDF")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("CDD")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -277,12 +281,12 @@ namespace Server.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("LaborContract");
                 });
@@ -332,8 +336,10 @@ namespace Server.Migrations
                     b.Property<int>("Total")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
@@ -344,9 +350,32 @@ namespace Server.Migrations
                         .IsUnique()
                         .HasFilter("[MonthlySalaryId] IS NOT NULL");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("MonthlySalary");
+                });
+
+            modelBuilder.Entity("Server.Entities.MonthTimeKeeping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MonthTimekeeping");
                 });
 
             modelBuilder.Entity("Server.Entities.Overtime", b =>
@@ -473,6 +502,9 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MTKId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -487,12 +519,12 @@ namespace Server.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Timekeeping");
                 });
@@ -555,6 +587,11 @@ namespace Server.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -570,8 +607,8 @@ namespace Server.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Sex")
-                        .HasColumnType("tinyint");
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
@@ -592,10 +629,6 @@ namespace Server.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PositionId");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -652,15 +685,14 @@ namespace Server.Migrations
                     b.Property<int>("Total")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Wage_TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("Wage_TypeId");
 
@@ -752,7 +784,7 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Entities.Department", b =>
                 {
                     b.HasOne("Server.Entities.Company", "Company")
-                        .WithMany("Departments")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -760,30 +792,11 @@ namespace Server.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("Server.Entities.LaborContract", b =>
-                {
-                    b.HasOne("Server.Entities.User", "User")
-                        .WithMany("LaborContracts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Server.Entities.MonthlySalary", b =>
                 {
                     b.HasOne("Server.Entities.Wage", null)
                         .WithOne("MonthlySalary")
                         .HasForeignKey("Server.Entities.MonthlySalary", "MonthlySalaryId");
-
-                    b.HasOne("Server.Entities.User", "User")
-                        .WithMany("MonthlySalaries")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Server.Entities.Position", b =>
@@ -795,89 +808,27 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Entities.Team", b =>
                 {
-                    b.HasOne("Server.Entities.Department", "Department")
+                    b.HasOne("Server.Entities.Department", null)
                         .WithMany("Teams")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("Server.Entities.Timekeeping", b =>
-                {
-                    b.HasOne("Server.Entities.User", "User")
-                        .WithMany("Timekeepings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Server.Entities.User", b =>
-                {
-                    b.HasOne("Server.Entities.Position", "Position")
-                        .WithMany("User")
-                        .HasForeignKey("PositionId");
-
-                    b.HasOne("Server.Entities.Team", "Team")
-                        .WithMany("User")
-                        .HasForeignKey("TeamId");
-
-                    b.Navigation("Position");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Server.Entities.Wage", b =>
                 {
-                    b.HasOne("Server.Entities.User", "User")
-                        .WithMany("Wages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Server.Entities.Wage_Type", "Wage_Type")
                         .WithMany("Wages")
                         .HasForeignKey("Wage_TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-
                     b.Navigation("Wage_Type");
-                });
-
-            modelBuilder.Entity("Server.Entities.Company", b =>
-                {
-                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Server.Entities.Department", b =>
                 {
                     b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("Server.Entities.Position", b =>
-                {
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Server.Entities.Team", b =>
-                {
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Server.Entities.User", b =>
-                {
-                    b.Navigation("LaborContracts");
-
-                    b.Navigation("MonthlySalaries");
-
-                    b.Navigation("Timekeepings");
-
-                    b.Navigation("Wages");
                 });
 
             modelBuilder.Entity("Server.Entities.Wage", b =>

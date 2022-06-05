@@ -11,9 +11,7 @@ namespace Server.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                 .UseIdentityColumn(1, 1);
-            builder.HasOne(x => x.User)
-                .WithMany(x => x.MonthlySalaries)
-                .HasForeignKey(x => x.UserId);
+            builder.Property(x => x.UserId).HasMaxLength(200);
         }
     }
 }

@@ -1,0 +1,38 @@
+﻿@page "/Admin/Company"
+@layout AdminLayout
+
+<Spin Spinning="Loadding">
+    <div class="row">
+        <div class="d-flex justify-content-center mt-2">
+        <div class="d-block">
+            <img height="260px" id="imageFile" src="@("data:image/jpeg;base64," + CompanyToGet.ImageFile)" />
+            <InputFile type="file" style="display: none" OnChange="FilePicker" id="chooseFileImage"/>
+            <button class="btn btn-primary mt-2" onclick="onPickFile('chooseFileImage')">Chọn logo</button>
+        </div>
+        </div>
+        <div class=" col-6 offset-3 row">
+            <div class="col-4">
+                <p class="mt-2"><p>Tên công ty:</p></p>
+                <p class="mt-2"><p>Ngày thành lập:</p></p>
+                <p class="mt-2"><p>Fax:</p></p>
+                <p class="mt-2"><p>Số điện thoại:</p></p>
+                <p class="mt-2"><p>Email:</p></p>
+                <p class="mt-2"><p>Mô tả:</p></p>
+            </div>
+            <div class="col-8">
+                <div class="mt-2"><Input TValue="string" @bind-Value="CompanyToGet.Name"></Input></div>
+                <div class="mt-2"><DatePicker @bind-Value="CompanyToGet.DOI" Format="dd/MM/yyyy"></DatePicker></div>
+                <div class="mt-2"><Input TValue="string" @bind-Value="CompanyToGet.Fax"></Input></div>
+                <div class="mt-2"><Input TValue="string" @bind-Value="CompanyToGet.ListPhoneNumber"></Input></div>
+                <div class="mt-2"><Input TValue="string" @bind-Value="CompanyToGet.Email"></Input></div>
+                <div class="mt-2"><TextArea @bind-Value="CompanyToGet.Description"></TextArea></div>
+            </div>
+            <div>
+                <button class="btn btn-primary mt-2" @onclick="Upsert">Lưu</button>
+            </div>
+        </div>   
+    </div>
+</Spin>
+@code {
+
+}

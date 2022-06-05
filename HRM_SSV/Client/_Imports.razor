@@ -9,6 +9,13 @@
 @using Client
 @using Client.Shared
 @using AntDesign
+@using AutoMapper
+@using Blazored.Toast
+@using Blazored.Toast.Services
 
-
+@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
+@inject IMapper Mapper
+@inject NotificationService Notice
+@inject IToastService ToastService
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage

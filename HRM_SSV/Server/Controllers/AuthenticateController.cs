@@ -1,4 +1,5 @@
-﻿using Domain.Modals.Response;
+﻿using AutoMapper;
+using Domain.Modals.Response;
 using Domain.Modals.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,13 @@ namespace Server.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public AuthenticateController(UserManager<User> userManager, IConfiguration configuration, IUserService userService)
+        private readonly IMapper _mapper;
+        public AuthenticateController(UserManager<User> userManager, IConfiguration configuration, IUserService userService, IMapper mapper)
         {
             _userManager = userManager;
             _configuration = configuration;
             _userService = userService;
+            _mapper = mapper;
         }
         [HttpGet]
         [Route("Login")]
@@ -52,13 +55,22 @@ namespace Server.Controllers
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
                 //return token
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
+                UserToGet userToGet = _mapper.Map<UserToGet>(user);
+                userToGet.ImageFile = Convert.ToBase64String(userToGet.Avatar);
+                userToGet.RoleName = userRoles[0];
+                return Ok(
+                    new Response()
+                    {
+                        User = userToGet,
+                        IsSuccess = true,
+                        Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    });
             }
-            return Unauthorized();
+            return Ok(
+                    new Response()
+                    {
+                        IsSuccess = false,
+                    }); 
         }
 
         [HttpPost]

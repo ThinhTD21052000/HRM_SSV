@@ -5,15 +5,17 @@ using Server.Services;
 
 namespace Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
-        public DepartmentController(IDepartmentService departmentService)
+        private readonly ICompanyService _companyService;
+        public DepartmentController(IDepartmentService departmentService, ICompanyService companyService)
         {
             _departmentService = departmentService;
+            _companyService = companyService;
         }
 
         [HttpGet]
@@ -35,6 +37,8 @@ namespace Server.Controllers
         [Route("Insert")]
         public async Task<IActionResult> Insert(DepartmentToAdd department)
         {
+            var company = await _companyService.GetList();
+            department.CompanyId = company[0].Id;
             await _departmentService.Create(department);
             return Ok("Insert Success!");
         }
@@ -43,6 +47,8 @@ namespace Server.Controllers
         [Route("Update")]
         public async Task<IActionResult> Update(DepartmentToUpdate department)
         {
+            var company = await _companyService.GetList();
+            department.CompanyId = company[0].Id;
             await _departmentService.Update(department);
             return Ok("Update Success!");
         }

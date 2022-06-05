@@ -1,0 +1,114 @@
+﻿@page "/Staff"
+
+@using Domain.Modals.User;
+@using Domain.Modals.Position;
+@using Domain.Modals.Team;
+@using Domain.Modals.Role;
+
+<Spin Spinning="Loadding">
+    <div class="d-flex justify-content-between mt-5 mb-3">
+        <h5>Quản lý thông tin nhân viên</h5>
+    </div>
+    <Table TItem="UserToGet" DataSource="@UserList" ScrollX="1500">
+        <Column @bind-Field="@context.LastName" Title="Họ tên">
+            <span>@(context.LastName + context.FirstName)</span>
+        </Column>
+        <Column @bind-Field="@context.ImageFile" Title="Ảnh đại diện" Width="150">
+            <img src="data:image/png;base64,@context.ImageFile" max-width="120" width="120" max-height="120"/>
+        </Column>
+        <Column @bind-Field="@context.Sex" Title="Giới tính">
+             <span>@(context.Sex == 1 ? "Nam" : context.Sex == 2 ? "Nữ" : "Khác")</span>
+        </Column>
+        <Column @bind-Field="@context.Address" Title="Địa chỉ"></Column>
+        <Column @bind-Field="@context.DoB"  Title="NGày sinh">
+            <span>@context.DoB.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <Column @bind-Field="@context.DoB"  Title="Ngày vào công ty">
+            <span>@context.DoB.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <Column @bind-Field="@context.PositionName" Title="Chức vụ"></Column>
+        <Column @bind-Field="@context.TeamName" Title="Đội"></Column>
+        <Column @bind-Field="@context.Email" Title="Email"></Column>
+        <Column @bind-Field="@context.PhoneNumber" Title="Số điện thoại"></Column>
+        <ActionColumn Title="Chức năng" Align="ColumnAlign.Right">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="(e) => OpenUpsert(context)" Shape="@ButtonShape.Circle"><Icon Type="edit" Theme="outline"/></Button>
+                    <Button OnClick="(e) => Open(context)" Shape="@ButtonShape.Circle"><Icon Type="eye" Theme="outline"/></Button>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+<Modal Title="@ModelTitle" Width="600"
+    Visible="@VisibleModal2"
+    OnCancel="@HideModal2"
+    CancelText="@("Hủy")">
+    <StaffAttachment User="UserToStranfer"></StaffAttachment>
+</Modal>
+<Modal Title="@ModelTitle"
+    Visible="@VisibleModal"
+    OnOk="@Upsert"
+    OnCancel="@HideModal"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    <div class="row">
+        <div class="col-6">
+            <label>Họ</label>
+            <Input @bind-Value="UserToGet.LastName"></Input>
+        </div>
+        <div class="col-6">
+            <label>Tên</label>
+            <Input @bind-Value="UserToGet.FirstName"></Input>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Giới tính</label>
+            <Select DataSource="@SexList"
+                @bind-value="@UserToGet.Sex"
+                DefaultValue="@(1)"
+                ValueName="@nameof(Sex.Id)"
+                LabelName="@nameof(Sex.Name)">
+            </Select>
+        </div>
+        <div class="col-6">
+            <label class="d-block">Ngày sinh</label>
+            <DatePicker @bind-Value="UserToGet.DoB" Format="dd/MM/yyyy"></DatePicker>
+        </div>
+    </div>
+    <div>
+        <label>Email</label>
+        <Input @bind-Value="UserToGet.Email"></Input>
+    </div>
+    <div>
+        <label>Số điện thoại</label>
+        <Input @bind-Value="UserToGet.PhoneNumber"></Input>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>chức vụ</label>
+            <Select DataSource="@PositionList"
+                @bind-Value="@UserToGet.PositionId"
+                DefaultValue="@PositionList[0].Id"
+                ValueName="@nameof(PositionToGet.Id)"
+                LabelName="@nameof(PositionToGet.Name)">
+            </Select>
+        </div>
+        <div class="col-6">
+
+            <label>Đội</label>
+            <Select DataSource="@TeamList"
+                @bind-Value="@UserToGet.TeamId"
+                DefaultValue="@TeamList[0].Id"
+                ValueName="@nameof(TeamToGet.Id)"
+                LabelName="@nameof(TeamToGet.Name)">
+            </Select>
+        </div>
+    </div>
+</Modal>
+
+
+@code {
+
+}

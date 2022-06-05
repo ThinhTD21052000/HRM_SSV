@@ -15,7 +15,8 @@ namespace Server.Configuration
                 .HasMaxLength(200)
                 .IsRequired();
             builder.Property(x => x.Fax)
-                .HasColumnType("VARCHAR");
+                .HasColumnType("VARCHAR")
+                .HasMaxLength(12);
             builder.Property(x => x.Email)
                 .HasColumnType("VARCHAR")
                 .HasMaxLength(100);

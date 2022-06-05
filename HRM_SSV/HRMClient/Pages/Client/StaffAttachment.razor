@@ -1,0 +1,66 @@
+﻿@page "/Staff-Attachment"
+@using Domain.Modals.LaborContract;
+@using Domain.Modals.User;
+
+<Spin Spinning="Loadding">
+    <div class="d-flex justify-content-between mt-5 mb-3">
+        <h5>Tài liệu nhân viên: @($"{User.LastName} {User.FirstName}")</h5>
+        <Button Type="@ButtonType.Primary" OnClick="(e) => OpenUpsert(false, new LaborContractToGet())" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle">
+            <Icon Type="plus" Theme="outline" />
+        </Button>
+    </div>
+    <Table TItem="LaborContractToGet" DataSource="@LaborContractList">
+        <Column @bind-Field="@context.Description" Title="Tiêu đề">
+        </Column>
+        <Column @bind-Field="@context.CreateDate" Title="Ngày tạo">
+             <span>@context.CreateDate.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <Column @bind-Field="@context.IsSigned" Title="Đã ký?">
+            <span>@(context.IsSigned ? "Đã ký" : "Chưa ký")</span>
+        </Column>
+        <ActionColumn Title="Chức năng" Align="ColumnAlign.Right">
+            <Space>
+               <SpaceItem>
+                    <Button OnClick="(e) => ViewAtachment(context.AttachmentPDF)" Shape="@ButtonShape.Circle"><Icon Type="eye" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button OnClick="(e) => Download(context.Attachment)" Shape="@ButtonShape.Circle"><Icon Type="download" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button OnClick="(e) => OpenUpsert(true, context)" Shape="@ButtonShape.Circle"><Icon Type="edit" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Popconfirm Title="Bạn có chắc chắn muốn xóa không?" OkText="Đồng ý" CancelText="Hủy" OnConfirm="(e) => Delete(context.Id)">
+                        <Button Danger Shape="@ButtonShape.Circle"><Icon Type="delete" Theme="outline"/></Button>
+                    </Popconfirm>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+<Modal Title="@ModelTitle"
+    Visible="@VisibleModal"
+    OnOk="@Upsert"
+    OnCancel="@HideModal"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    
+    <div>
+        <label>Tiêu đề</label>
+        <Input @bind-Value="LaborContractToGet.Description"></Input>
+    </div>
+    <div>
+            <label>Tải file</label>
+            <InputFile type="file" style="display: none" OnChange="FilePicker" id="chooseFile"/>
+            <button class="btn btn-primary mt-2" onclick="onPickFile('chooseFile')">Chọn file</button>
+        </div>
+</Modal>
+<Modal Title="Xem file"
+Width="1000"
+    Visible="@VisibleModalView"
+    OnCancel="@HideModalView"
+    CancelText="@("Quay lại")">
+    <iframe class="w-100" height="600px" src="data:application/pdf;base64,@AtachmentBase64"></iframe>
+</Modal>
+@code {
+}

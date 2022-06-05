@@ -14,9 +14,6 @@ namespace Server.Configuration
             builder.Property(x => x.Name)
                 .HasMaxLength(200)
                 .IsRequired();
-            builder.HasOne(x => x.Company)
-                .WithMany(x => x.Departments)
-                .HasForeignKey(x => x.CompanyId);
         }
     }
 }

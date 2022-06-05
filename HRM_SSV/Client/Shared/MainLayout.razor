@@ -1,12 +1,64 @@
 ﻿@inherits LayoutComponentBase
 
+@using Blazored.Toast.Configuration
+@using Domain.Modals.User
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                IconType="Blazored.Toast.IconType.FontAwesome"
+                ErrorIcon="fa fa-times"
+                InfoIcon="fa fa-info"
+                SuccessIcon="fa fa-check"
+                WarningIcon="fa fa-exclamation" />
 <body class="@(IsShowSideBar ? "body-pd" : "")" id="body-pd d">
-    <NavBar IsShowSideBar="IsShowSideBar"/>
+    <header class="header @(IsShowSideBar ? "body-pd" : "")" id="header">
+        <div class="header_toggle" @onclick="CollapseOrShow"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+        <div class="header_img"> 
+                <Dropdown>
+                    <Overlay>
+                        <Menu>
+                            <MenuItem>
+                                <div class="d-flex">
+                                    <Avatar height="50px" width="50px" src="@("data:image/png;base64," + User.ImageFile)" alt=""/>
+                                    <p class="mt-3 ml-2"<b>@($"{User.LastName} {User.FirstName}")</b></p>
+                                </div>
+                            </MenuItem>
+                            <MenuItem>
+                                <a target="_blank" rel="noopener noreferrer" href="">
+                                    Xem thông tin tài khoản
+                                </a>
+                            </MenuItem>
+                            <MenuItem>
+                                <a target="_blank" rel="noopener noreferrer" href="">
+                                    Đăng xuất
+                                </a>
+                            </MenuItem>
+                        </Menu>
+                    </Overlay>
+                <ChildContent>
+                    <img src="data:image/png;base64,@User.ImageFile" alt="">
+                </ChildContent>
+            </Dropdown>
+        </div>
+    </header>
     <SideBar IsShowSideBar="IsShowSideBar" />
     <div class="height-100 w-100">
         @Body
     </div>
 </body>
-@code{
+
+
+
+@code {
     public bool IsShowSideBar { get; set; } = false;
+    public UserToGet User { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        User = await LocalStorage.GetItemAsync<UserToGet>("user");
+    }
+    private void CollapseOrShow()
+    {
+        IsShowSideBar = !IsShowSideBar;
+        StateHasChanged();
+    }
+
 }

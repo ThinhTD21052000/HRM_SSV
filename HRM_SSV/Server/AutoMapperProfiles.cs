@@ -11,6 +11,7 @@ using Domain.Modals.Position;
 using Domain.Modals.Role;
 using Domain.Modals.Team;
 using Domain.Modals.Timekeeping;
+using Domain.Modals.MonthTimekeeping;
 using Domain.Modals.User;
 using Domain.Modals.ViolationMoney;
 using Domain.Modals.Wage;
@@ -74,6 +75,10 @@ namespace Server
             CreateMap<Timekeeping, TimekeepingToAdd>().ReverseMap();
             CreateMap<Timekeeping, TimekeepingToGet>().ReverseMap();
             CreateMap<Timekeeping, TimekeepingToUpdate>().ReverseMap();
+
+            CreateMap<MonthTimeKeeping, MonthTimekeepingToAdd>().ReverseMap();
+            CreateMap<MonthTimeKeeping, MonthTimekeepingToGet>().ReverseMap();
+            CreateMap<MonthTimeKeeping, MonthTimekeepingToUpdate>().ReverseMap();
 
             CreateMap<ViolationMoney, ViolationMoneyToAdd>().ReverseMap();
             CreateMap<ViolationMoney, ViolationMoneyToGet>().ReverseMap();

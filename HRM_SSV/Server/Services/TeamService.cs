@@ -30,7 +30,7 @@ namespace Server.Services
 
         public async Task Delete(int id)
         {
-            await _teamRepository.Delete(_mapper.Map<Team>( await Get(id)));
+            await _teamRepository.Delete(await _teamRepository.Get(x => x.Id == id));
         }
 
         public async Task<TeamToGet> Get(int id)

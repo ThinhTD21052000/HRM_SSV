@@ -10,6 +10,6 @@
         public DateTime Date { get; set; }
         public int Wage_TypeId { get; set; }
         public int MonthlySalaryId { get; set; }
-        public Guid UserId { get; set; } 
+        public string UserId { get; set; } = string.Empty;
     }
 }

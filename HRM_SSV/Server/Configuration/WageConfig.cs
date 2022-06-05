@@ -11,9 +11,6 @@ namespace Server.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                 .UseIdentityColumn(1, 1);
-            builder.HasOne(x => x.User)
-                .WithMany(x => x.Wages)
-                .HasForeignKey(x => x.UserId);
             builder.HasOne(x => x.Wage_Type)
                 .WithMany(x => x.Wages)
                 .HasForeignKey(x => x.Wage_TypeId);

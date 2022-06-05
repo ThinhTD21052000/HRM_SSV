@@ -60,6 +60,7 @@ namespace Server
             services.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
             services.AddScoped(typeof(ITeamRepository), typeof(TeamRepository));
             services.AddScoped(typeof(ITimekeepingRepository), typeof(TimekeepingRepository));
+            services.AddScoped(typeof(IMonthTimekeepingRepository), typeof(MonthTimekeepingRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(IViolationMoneyRepository), typeof(ViolationMoneyRepository));
             services.AddScoped(typeof(IWageRepository), typeof(WageRepository));
@@ -77,6 +78,7 @@ namespace Server
             services.AddTransient(typeof(IRoleService), typeof(RoleService));
             services.AddTransient(typeof(ITeamService), typeof(TeamService));
             services.AddTransient(typeof(ITimekeepingService), typeof(TimekeepingService));
+            services.AddTransient(typeof(IMonthTimekeepingService), typeof(MonthTimekeepingService));
             services.AddTransient(typeof(IUserService), typeof(UserService));
             services.AddTransient(typeof(IViolationMoneyService), typeof(ViolationMoneyService));
             services.AddTransient(typeof(IWageService), typeof(WageService));

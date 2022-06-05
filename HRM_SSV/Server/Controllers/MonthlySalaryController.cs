@@ -20,7 +20,9 @@ namespace Server.Controllers
         [Route("GetList")]
         public async Task<IActionResult> GetList()
         {
-            return Ok(await _monthlySalaryService.GetList());
+            var list = await _monthlySalaryService.GetList();
+            list = list.OrderByDescending(x => x.Year).ToList();
+            return Ok();
         }
 
         [HttpGet]

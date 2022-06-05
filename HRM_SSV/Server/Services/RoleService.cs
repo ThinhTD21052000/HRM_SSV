@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Modals.Role;
+using Microsoft.AspNetCore.Identity;
 using Server.Entities;
 using Server.Repositories;
 
@@ -9,33 +10,40 @@ namespace Server.Services
     {
         Task Create(RoleToAdd roleToAdd);
         Task Update(RoleToUpdate RoleToUpdate);
-        Task Delete(int id);
-        Task<RoleToGet> Get(int id);
+        Task Delete(Guid id);
+        Task<RoleToGet> Get(Guid id);
         Task<List<RoleToGet>> GetList();
     }
     public class RoleService : IRoleService
     {
         private readonly IRoleRepository _roleRepository;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
-        public RoleService(IRoleRepository roleRepository, IMapper mapper)
+        public RoleService(IRoleRepository roleRepository, IMapper mapper, RoleManager<Role> roleManager)
         {
             _roleRepository = roleRepository;
             _mapper = mapper;
+            _roleManager = roleManager;
         }
 
         public async Task Create(RoleToAdd roleToAdd)
         {
-            await _roleRepository.Add(_mapper.Map<Role>(roleToAdd));
+            if (!await _roleManager.RoleExistsAsync(roleToAdd.Name))
+            {
+                roleToAdd.Id = Guid.NewGuid();
+                await _roleManager.CreateAsync(_mapper.Map<Role>(roleToAdd));
+            }
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
-            await _roleRepository.Delete(_mapper.Map<Role>( await Get(id)));
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+            await _roleManager.DeleteAsync(role);
         }
 
-        public async Task<RoleToGet> Get(int id)
+        public async Task<RoleToGet> Get(Guid id)
         {
-            return _mapper.Map<RoleToGet>(await _roleRepository.Get(x => x.Id.Equals(id)));
+            return _mapper.Map<RoleToGet>(await _roleManager.FindByIdAsync(id.ToString()));
         }
 
         public async Task<List<RoleToGet>> GetList()
@@ -45,7 +53,7 @@ namespace Server.Services
 
         public async Task Update(RoleToUpdate roleToUpdate)
         {
-            await _roleRepository.Update(_mapper.Map<Role>(roleToUpdate));
+            await _roleManager.UpdateAsync(_mapper.Map<Role>(roleToUpdate));
         }
     }
 }

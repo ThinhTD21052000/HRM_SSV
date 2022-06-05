@@ -1,0 +1,53 @@
+﻿@page "/Admin/Team"
+
+@using Domain.Modals.Team;
+
+<Spin Spinning="Loadding">
+    <div class="d-flex justify-content-between mt-5 mb-3">
+        <h5>Quản lý phòng ban</h5>
+        <Button Type="@ButtonType.Primary" OnClick="(e) => OpenUpsert(false, new TeamToGet())" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle">
+            <Icon Type="plus" Theme="outline" />
+        </Button>
+    </div>
+    <Table TItem="TeamToGet" DataSource="@TeamList">
+        <Column @bind-Field="@context.Name"></Column>
+        <Column @bind-Field="@context.Description"></Column>
+        <Column @bind-Field="@context.Manager"></Column>
+        <ActionColumn Title="Chức năng">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="(e) => OpenUpsert(true, context)" Shape="@ButtonShape.Circle"><Icon Type="edit" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Popconfirm Title="Bạn có chắc chắn muốn xóa không?" OkText="Đồng ý" CancelText="Hủy" OnConfirm="(e) => Delete(context.Id)">
+                        <Button Danger Shape="@ButtonShape.Circle"><Icon Type="delete" Theme="outline"/></Button>
+                    </Popconfirm>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+<Modal Title="@ModelTitle"
+    Visible="@VisibleModal"
+    OnOk="@Upsert"
+    OnCancel="@HideModal"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    <div>
+        <label>Tên phòng ban</label>
+        <Input @bind-Value="TeamToGet.Name"></Input>
+    </div>
+    <div>
+        <label>Người quản lý</label>
+        <AutoComplete @bind-Value="@TeamToGet.Manager" Options="@Options"/>
+    </div>
+    <div>
+        <label>Mô tả</label>
+        <TextArea @bind-Value="TeamToGet.Description"></TextArea>
+    </div>
+</Modal>
+
+
+@code {
+
+}

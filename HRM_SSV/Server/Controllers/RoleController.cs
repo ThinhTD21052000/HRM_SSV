@@ -5,7 +5,7 @@ using Server.Services;
 
 namespace Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
@@ -25,7 +25,7 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("Get")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(Guid Id)
         {
             return Ok(await _roleService.Get(Id));
         }
@@ -49,7 +49,7 @@ namespace Server.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _roleService.Delete(id);
             return Ok("Delete Success!");

@@ -1,19 +1,24 @@
-﻿using Domain.Modals.User;
+﻿using Domain.Modals.Response;
+using Domain.Modals.User;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Server.Entities;
 using Server.Services;
 
 namespace Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly UserManager<User> _userManager;
+        public UserController(IUserService userService, UserManager<User> userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -25,7 +30,7 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("Get")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(Guid Id)
         {
             return Ok(await _userService.Get(Id));
         }
@@ -35,8 +40,7 @@ namespace Server.Controllers
         [Route("Insert")]
         public async Task<IActionResult> Insert(UserToAdd user)
         {
-            await _userService.Create(user);
-            return Ok("Insert Success!");
+            return Ok(await _userService.Create(user));
         }
 
         [HttpPut]
@@ -49,10 +53,25 @@ namespace Server.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _userService.Delete(id);
             return Ok("Delete Success!");
+        }      
+
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordReponse reponse)
+        {
+            await _userService.ChangePassword(reponse.User, reponse.OldPassword, reponse.NewPassword);
+            return Ok("Change Password Success!");
+        }  
+        
+        [HttpGet]
+        [Route("CheckPassword")]
+        public async Task<IActionResult> CheckPassword(Guid id, string password)
+        {
+            return Ok(await _userService.CheckPassword(id, password));
         }        
     }
 }

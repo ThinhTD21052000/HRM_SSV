@@ -26,6 +26,7 @@ namespace Server.DBContext
             modelBuilder.ApplyConfiguration(new RoleConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
             modelBuilder.ApplyConfiguration(new TimekeepingConfig());
+            modelBuilder.ApplyConfiguration(new MonthTimekeepingConfig());
             modelBuilder.ApplyConfiguration(new ViolationMoneyConfig());
             modelBuilder.ApplyConfiguration(new TeamConfig());
             modelBuilder.ApplyConfiguration(new WageConfig());
@@ -49,6 +50,7 @@ namespace Server.DBContext
         public DbSet<Role> Role { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Timekeeping> Timekeeping { get; set; }
+        public DbSet<MonthTimeKeeping> MonthTimekeeping { get; set; }
         public DbSet<ViolationMoney> ViolationMoney { get; set; }
         public DbSet<Team> Team { get; set; }
         public DbSet<Wage> Wage { get; set; }

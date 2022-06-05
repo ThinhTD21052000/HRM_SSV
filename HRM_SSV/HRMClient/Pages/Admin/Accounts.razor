@@ -1,0 +1,148 @@
+﻿@page "/Admin/Account"
+@layout AdminLayout
+@using Domain.Modals.User;
+@using Domain.Modals.Position;
+@using Domain.Modals.Team;
+@using Domain.Modals.Role;
+
+<Spin Spinning="Loadding">
+    <div class="d-flex justify-content-between mt-5 mb-3">
+        <h5>Quản lý tài khoản</h5>
+        <Button Type="@ButtonType.Primary" OnClick="(e) => OpenUpsert(false, new UserToGet())" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle" >
+            <Icon Type="plus" Theme="outline"/>
+        </Button>
+    </div>
+    <Table TItem="UserToGet" DataSource="@UserList">
+        <Column @bind-Field="@context.LastName" Title="Họ tên">
+            <span>@(context.LastName + context.FirstName)</span>
+        </Column>
+        <Column @bind-Field="@context.ImageFile" Title="Ảnh đại diện">
+            <img src="data:image/png;base64,@context.ImageFile" max-width="120px" max-height="120px"/>
+        </Column>
+        <Column @bind-Field="@context.UserName" Title="Tên tài khoản"></Column>
+        <Column @bind-Field="@context.RoleName" Title="Loại tài khoản"></Column>
+        <Column @bind-Field="@context.Password" Title="Mật khẩu"></Column>
+        <Column @bind-Field="@context.Sex" Title="Giới tính">
+             <span>@(context.Sex == 1 ? "Nam" : context.Sex == 2 ? "Nữ" : "Khác")</span>
+        </Column>
+        <Column @bind-Field="@context.Address" Title="Địa chỉ"></Column>
+        <Column @bind-Field="@context.DoB"  Title="NGày sinh">
+            <span>@context.DoB.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <Column @bind-Field="@context.DoB"  Title="Ngày vào công ty">
+            <span>@context.DoB.ToString("dd/MM/yyyy")</span>
+        </Column>
+        <Column @bind-Field="@context.PositionName" Title="Chức vụ"></Column>
+        <Column @bind-Field="@context.TeamName" Title="Đội"></Column>
+        <Column @bind-Field="@context.Email" Title="Email"></Column>
+        <Column @bind-Field="@context.PhoneNumber" Title="Số điện thoại"></Column>
+        <ActionColumn Title="Chức năng" Align="ColumnAlign.Right">
+            <Space>
+                <SpaceItem>
+                    <Button OnClick="(e) => OpenUpsert(true, context)" Shape="@ButtonShape.Circle"><Icon Type="edit" Theme="outline"/></Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Popconfirm Title="Bạn có chắc chắn muốn xóa không?" OkText="Đồng ý" CancelText="Hủy" OnConfirm="(e) => Delete(context.Id)">
+                        <Button Danger Shape="@ButtonShape.Circle"><Icon Type="delete" Theme="outline"/></Button>
+                    </Popconfirm>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>
+    </Table>
+</Spin>
+<Modal Title="@ModelTitle"
+    Visible="@VisibleModal"
+    OnOk="@Upsert"
+    OnCancel="@HideModal"
+    OkText="@("Lưu")"
+    CancelText="@("Hủy")">
+    <div class="row">
+        <div class="col-6">
+            <label>Họ</label>
+            <Input @bind-Value="UserToGet.LastName"></Input>
+        </div>
+        <div class="col-6">
+            <label>Tên</label>
+            <Input @bind-Value="UserToGet.FirstName"></Input>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div>
+                <label>Tên tài khoản</label>
+                <Input @bind-Value="UserToGet.UserName"></Input>
+            </div>
+        </div>
+        <div class="col-4">
+            <label>Loại tài khoản</label>
+            <Select DataSource="@RoleList"
+                @bind-Value="@UserToGet.RoleName"
+                DefaultValue="@(RoleList[0].Name)"
+                ValueName="@nameof(RoleToGet.Name)"
+                LabelName="@nameof(RoleToGet.Name)">
+            </Select>
+        </div>
+       
+    </div>
+    <div class="row">
+        <div class="col-11">
+            <label>Mật khẩu</label>
+            <Input @bind-Value="UserToGet.Password"></Input>
+        </div>
+        <div class="col-1 mt-3 p-0">
+            <Button OnClick="RandomKey" Type="@ButtonType.Primary" Size="@ButtonSize.Large" Shape="@ButtonShape.Circle">
+                <Icon Type="reload" Theme="outline"/>
+            </Button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>Giới tính</label>
+            <Select DataSource="@SexList"
+                @bind-value="@UserToGet.Sex"
+                DefaultValue="@(1)"
+                ValueName="@nameof(Sex.Id)"
+                LabelName="@nameof(Sex.Name)">
+            </Select>
+        </div>
+        <div class="col-6">
+            <label class="d-block">Ngày sinh</label>
+            <DatePicker @bind-Value="UserToGet.DoB" Format="dd/MM/yyyy"></DatePicker>
+        </div>
+    </div>
+    <div>
+        <label>Email</label>
+        <Input @bind-Value="UserToGet.Email"></Input>
+    </div>
+    <div>
+        <label>Số điện thoại</label>
+        <Input @bind-Value="UserToGet.PhoneNumber"></Input>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label>chức vụ</label>
+            <Select DataSource="@PositionList"
+                @bind-Value="@UserToGet.PositionId"
+                DefaultValue="@PositionList[0].Id"
+                ValueName="@nameof(PositionToGet.Id)"
+                LabelName="@nameof(PositionToGet.Name)">
+            </Select>
+        </div>
+        <div class="col-6">
+
+            <label>Đội</label>
+            <Select DataSource="@TeamList"
+                @bind-Value="@UserToGet.TeamId"
+                DefaultValue="@TeamList[0].Id"
+                ValueName="@nameof(TeamToGet.Id)"
+                LabelName="@nameof(TeamToGet.Name)">
+            </Select>
+        </div>
+    </div>
+
+</Modal>
+
+
+@code {
+
+}

@@ -8,6 +8,7 @@
         public string CDD { get; set; } = string.Empty;
         public bool IsSigned { get; set; }
         public byte[]? Attachment { get; set; }
-        public Guid UserId { get; set; }
+        public byte[]? AttachmentPDF { get; set; }
+        public string UserId { get; set; } = string.Empty;
     }
 }

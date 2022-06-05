@@ -25,7 +25,8 @@ namespace Server.Services
 
         public async Task Create(LaborContractToAdd laborContractToAdd)
         {
-            await _laborContractRepository.Add(_mapper.Map<LaborContract>(laborContractToAdd));
+            LaborContract laborContract = _mapper.Map<LaborContract>(laborContractToAdd);
+            await _laborContractRepository.Add(laborContract);
         }
 
         public async Task Delete(int id)

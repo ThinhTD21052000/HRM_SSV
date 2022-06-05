@@ -30,7 +30,7 @@ namespace Server.Services
 
         public async Task Delete(int id)
         {
-            await _departmentRepository.Delete(_mapper.Map<Department>( await Get(id)));
+            await _departmentRepository.Delete(await _departmentRepository.Get(x => x.Id == id));
         }
 
         public async Task<DepartmentToGet> Get(int id)
