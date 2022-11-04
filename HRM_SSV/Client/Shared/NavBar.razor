@@ -1,0 +1,14 @@
+﻿<header class="header @(IsShowSideBar ? "body-pd" : "")" id="header">
+    <div class="header_toggle" @onclick="CollapseOrShow"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+    <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+</header>
+
+@code {
+    [Parameter]
+    public bool IsShowSideBar { get; set; } = false;
+    private void CollapseOrShow()
+    {
+        IsShowSideBar = !IsShowSideBar;
+        StateHasChanged();
+    }
+}

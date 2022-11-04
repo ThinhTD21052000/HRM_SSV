@@ -1,17 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<body class="@(IsShowSideBar ? "body-pd" : "")" id="body-pd d">
+    <NavBar IsShowSideBar="IsShowSideBar"/>
+    <SideBar IsShowSideBar="IsShowSideBar" />
+    <div class="height-100 w-100">
+        @Body
     </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+</body>
+@code{
+    public bool IsShowSideBar { get; set; } = false;
+}
